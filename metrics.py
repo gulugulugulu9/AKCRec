@@ -3,15 +3,6 @@ import  random
 import numpy as np
 from sklearn.metrics import roc_auc_score
 
-# 对每个用户随机从90-99随机取一个，跟指标的topk进行比对。
-def shuffleConstant(length, k=100):
-    index = random.randint(90, 99)
-    y = tf.constant(index, shape=[1, k])
-    for i in range(length - 1):
-        index = random.randint(90, 99)
-        x = tf.constant(index, shape=[1, k])
-        y = tf.concat([x, y], axis=0)
-    return y
 
 
 
