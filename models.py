@@ -91,7 +91,7 @@ class GCN(Model):
     def _build(self):
 
         self.layers.append(GraphConvolution(input_dim=self.input_dim,
-                                            output_dim=FLAGS.hidden1,
+                                            output_dim=FLAGS.hidden0,
                                             length=self.length,
                                             placeholders=self.placeholders,
                                             tag=self.tag,
@@ -101,7 +101,14 @@ class GCN(Model):
                                             logging=self.logging,
                                             name='first'+self.tag,
                                             featureless=False))
-
+        self.layers.append(GraphConvolution(input_dim=FLAGS.hidden0,
+                                            output_dim=FLAGS.hidden1,
+                                            length=self.length,
+                                            placeholders=self.placeholders,
+                                            tag=self.tag,
+                                            act=tf.nn.relu,
+                                            dropout=True,
+                                            logging=self.logging))
         self.layers.append(GraphConvolution(input_dim=FLAGS.hidden1,
                                             output_dim=FLAGS.hidden2,
                                             length=self.length,

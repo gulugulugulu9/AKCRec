@@ -3,8 +3,7 @@ import tensorflow as tf
 from models import *
 import time
 import numpy as np
-
-
+import csv
 
 # Set random seed
 seed = 123
@@ -21,6 +20,8 @@ decay_steps = 100
 # Settings
 flags = tf.app.flags
 FLAGS = flags.FLAGS
+# 05.10加四层GCN
+flags.DEFINE_integer('hidden0', 512, 'Number of units in hidden layer 0.')
 flags.DEFINE_integer('hidden1', 256, 'Number of units in hidden layer 1.')
 flags.DEFINE_integer('hidden2', 128, 'Number of units in hidden layer 2.')
 flags.DEFINE_float('dropout', 0.5, 'Dropout rate (1 - keep probability).')
@@ -97,7 +98,7 @@ while epoch < global_steps:
         print(aLine_new)
         index = 0
         # 修改
-        nowList = [AUC, HR1, HR5, HR10, NDCG5, NDCG10, auc1, hratNew1, hratNew5,hratNew10, ndcgNew5, ndcgNew10, recall5, recall10]
+        nowList = [AUC, HR1, HR5, HR10, NDCG5, NDCG10, auc1, hratNew1, hratNew5, hratNew10, ndcgNew5, ndcgNew10, recall5, recall10]
         for real in nowList:
             if real > maxList[index]:
                 maxList[index] = real
@@ -116,3 +117,10 @@ while epoch < global_steps:
         print("maxEpoch: ", maxEpoch)
         print("-------------------------------------------------")
     epoch += 1
+
+# maxList存储的就是最大值
+temp = maxList[6:]
+temp.append(FLAGS.latent_dim)
+with open("result.csv", mode='a',encoding="UTF-8",newline='')as f:
+    writer = csv.writer(f)
+    writer.writerow(temp)
